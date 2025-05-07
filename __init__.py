@@ -46,11 +46,11 @@ def get_anarchy_key_value():
 
 @keybind("Add Anarchy")
 def add_anarchy_key_pressed():
-    num_stacks_attr, *_ = get_anarchy_attrs()
-    if num_stacks_attr:
+    num_stacks_attr, stack_cap_attr = get_anarchy_attrs()
+    if num_stacks_attr and stack_cap_attr:
         stacks, *_ = num_stacks_attr.GetValue(get_pc())
-        if (stacks + get_anarchy_key_value()) > find_object("DesignerAttributeDefinition", "GD_Tulip_Mechromancer_Skills.Misc.Att_Anarchy_StackCap").GetValue(get_pc())[0]:
-            num_stacks_attr.SetAttributeBaseValue(get_pc(), find_object("DesignerAttributeDefinition", "GD_Tulip_Mechromancer_Skills.Misc.Att_Anarchy_StackCap").GetValue(get_pc())[0])
+        if (stacks + get_anarchy_key_value()) > stack_cap_attr.GetValue(get_pc())[0]:
+            num_stacks_attr.SetAttributeBaseValue(get_pc(), stack_cap_attr.GetValue(get_pc())[0])
         else:
             num_stacks_attr.SetAttributeBaseValue(get_pc(), stacks + get_anarchy_key_value())
 
@@ -72,16 +72,28 @@ def on_save():
     if num_stacks_attr:
         stacks, *_ = num_stacks_attr.GetValue(get_pc())
         save_file_name.value = get_pc().GetSaveGameNameFromId(0)
-        saved_anarchy.value = stacks
+        if stacks >= 0.0:
+            saved_anarchy.value = stacks
+        else:
+            saved_anarchy.value = 0
 
 def on_load():
-    num_stacks_attr, *_ = get_anarchy_attrs()
-    if stack_uncap.value:
-        uncap_anarchy()
-    if num_stacks_attr and (save_file_name.value == get_pc().GetSaveGameNameFromId(0)) and (saved_anarchy.value != float('inf')):
-        num_stacks_attr.SetAttributeBaseValue(get_pc(), round(saved_anarchy.value * anarchy_multiplier.value / 100))
-    elif num_stacks_attr and (saved_anarchy.value == float('inf')):
-        num_stacks_attr.SetAttributeBaseValue(get_pc(), float('inf'))
+    correct_save = (save_file_name.value == get_pc().GetSaveGameNameFromId(0))
+    num_stacks_attr, stack_cap_attr = get_anarchy_attrs()
+    if num_stacks_attr and stack_cap_attr:
+        if saved_anarchy.value == float('inf'):
+            modified_anarchy = saved_anarchy.value
+        else:
+            modified_anarchy = round(saved_anarchy.value * anarchy_multiplier.value / 100)
+            
+        if stack_uncap.value and (correct_save):
+            uncap_anarchy()
+            num_stacks_attr.SetAttributeBaseValue(get_pc(), modified_anarchy)
+        elif not stack_uncap.value and (correct_save):
+            if modified_anarchy > stack_cap_attr.GetValue(get_pc())[0]:
+                num_stacks_attr.SetAttributeBaseValue(get_pc(), stack_cap_attr.GetValue(get_pc())[0])
+            else:
+                num_stacks_attr.SetAttributeBaseValue(get_pc(), modified_anarchy)
 
 mod = mods_base.build_mod()
 register_save_options(mod)
