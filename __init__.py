@@ -25,7 +25,7 @@ def uncap_anarchy():
         stack_cap_attr.SetAttributeBaseValue(get_pc(), float('inf'))
 
 anarchy_multiplier = SliderOption(
-    identifier="Percentage of Anarchy to save",
+    identifier="Percentage of Anarchy to restore",
     value=100,
     is_integer=True,
     min_value=0,
@@ -37,7 +37,7 @@ anarchy_keys = SliderOption(
     identifier="Anarchy stack change with keybinds",
     value=50,
     is_integer=True,
-    min_value=0,
+    min_value=1,
     max_value=600,
     description="How much Anarchy is added or subtracted when activating the corresponding keybinds. Will not add Anarchy above your cap or subtract to below 0."
 )
