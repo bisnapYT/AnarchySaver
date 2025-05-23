@@ -163,10 +163,8 @@ def on_load():
                 set_anarchy(modified_anarchy)
 
 def on_enable() -> None:
-    if stack_uncap.value:
-        uncap_anarchy()
-    if display_anarchy.value:
-        simple_math.enable()
+    toggle_anarchy_cap(stack_uncap, stack_uncap.value)
+    toggle_anarchy_display(display_anarchy, display_anarchy.value)
 mod = mods_base.build_mod(
     keybinds = [add_anarchy_key_pressed, subtract_anarchy_key_pressed, display_anarchy_key_pressed],
     options = [anarchy_multiplier, anarchy_keys, stack_uncap, display_anarchy]

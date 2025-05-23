@@ -7,7 +7,9 @@
 
 
 ## Version History
-- 1.1 (current)
+- 1.1.1
+    - Fixed 'Display Anarchy Past 999' acting as though it's enabled on game launch regardless of your setting. This may also have affected 'Uncap Anarchy'
+- 1.1
     - Adjusted user-facing descriptions
     - Added 'Display Current Anarchy' keybind 
     - Added 'Display Anarchy Past 999' option
