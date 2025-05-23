@@ -131,7 +131,7 @@ def display_anarchy_key_pressed():
     num_stacks_attr, num_stacks, *_ = get_anarchy_attrs()
     if num_stacks_attr and num_stacks is not None:
         num_stacks = int(num_stacks)
-        show_hud_message("Current Anarchy", f"{num_stacks:,}", 15)
+        show_hud_message("Current Anarchy", f"{num_stacks:,}")
 
 save_file_name = HiddenSaveOption("workaround_value", 0)
 saved_anarchy = HiddenSaveOption("anarchy", 0)
